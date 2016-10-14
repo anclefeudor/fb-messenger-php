@@ -7,26 +7,10 @@ namespace pimax\Messages;
  * @package pimax\Messages
  */
 class QuickReply extends Message{
-	
-	/**
-     * Structured message button type
-     */
-    const TYPE_TEXT = "text";
-
     /**
-     * Structured message generic type
-     */
-    const TYPE_ATTACHMENT = "attachment";
-	
-	/**
      * @var array
      */
-    protected $attachment = null;
-
-	/**
-     * @var null|string
-     */
-    protected $type = null;
+    protected $quick_replies = null;
 
     /**
      * Message constructor.
@@ -35,51 +19,23 @@ class QuickReply extends Message{
      * @param $text - string
      * @param $quick_replies - array of array("content_type","title","payload"),..,..
      */
-    public function __construct($recipient, $data, $quick_replies, $type = self::TYPE_TEXT)
+    public function __construct($recipient, $text, $quick_replies)
     {
-		$this->type = $type;
-
-		switch ($type)
-        {
-            case self::TYPE_TEXT:
-               parent::__construct($recipient, $data, $quick_replies);
-            break;
-
-            case self::TYPE_ATTACHMENT:
-                parent::__construct($recipient, "", $quick_replies);
-		        $this->attachment = $data;
-            break;
-        } 
+        $this->quick_replies = $quick_replies;
+        parent::__construct($recipient,$text);
     }
-
-	/**
-     * Get message data
-     *
-     * @return array
-     */
     public function getData() {
-	
-		$result = [
+        return [
             'recipient' =>  [
                 'id' => $this->recipient
             ],
             'message' => [
-                'quick_replies' => $this->quick_replies
+                'text' => $this->text,
+                'quick_replies'=>$this->quick_replies
             ]
         ];
-	
-		switch ($this->type)
-        {
-            case self::TYPE_TEXT:
-                $result['message']['text'] = $this->text;
-            break;
 
-            case self::TYPE_ATTACHMENT:
-                $result['message']['attachment'] = $this->attachment;
-            break;
-        }
-	
-        return $result;
+        
     }
 }
 

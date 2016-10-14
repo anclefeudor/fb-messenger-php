@@ -4,11 +4,11 @@ namespace pimax\Messages;
 
 
 /**
- * Class ImageMessage
+ * Class VideoMessage
  *
  * @package pimax\Messages
  */
-class ImageMessage extends Message
+class VideoMessage extends Message
 {
     /**
      * @var null|string
@@ -46,18 +46,15 @@ class ImageMessage extends Message
             ]
         ];
 
-        $attachment = new Attachment(Attachment::TYPE_IMAGE);
+        $attachment = new Attachment(Attachment::TYPE_VIDEO);
 
         if (strpos($this->text, 'http://') === 0 || strpos($this->text, 'https://') === 0) {
             $attachment->setPayload(array('url' => $this->text));
-            $res['message'] = $attachment->getData();
         } else {
-            $attachment->setPayload(array('url' => basename($this->text)));
             $attachment->setFileData($this->getCurlValue($this->text, mime_content_type($this->text), basename($this->text)));
-            $res['message'] = $attachment->getData();
-            $res['filedata'] = $res['message']['filedata'];
-            unset($res['message']['filedata']);
         }
+
+        $res['message'] = $attachment->getData();
 
         return $res;
     }
