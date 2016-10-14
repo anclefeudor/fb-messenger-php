@@ -36,6 +36,7 @@ class Message
      * @param $recipient
      * @param $text
 	 * @param $quick_replies
+	 * @param $metadata
      */
     public function __construct($recipient, $text, $quick_replies = null, $metadata = null)
     {
