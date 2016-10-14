@@ -11,26 +11,38 @@ namespace pimax\Messages;
 class Message
 {
     /**
-     * @var null|string
+     * @var integer|null
      */
     protected $recipient = null;
 
     /**
-     * @var null|string
+     * @var string
      */
     protected $text = null;
+
+	/**
+     * @var string
+     */
+    protected $metadata = null;
+
+	/**
+     * @var array
+     */
+    protected $quick_replies = null;
 
     /**
      * Message constructor.
      *
-     * @param string $recipient
-     * @param string $text
+     * @param $recipient
+     * @param $text
+	 * @param $quick_replies
      */
-    public function __construct($recipient, $text)
+    public function __construct($recipient, $text, $quick_replies = null, $metadata = null)
     {
         $this->recipient = $recipient;
         $this->text = $text;
-
+		$this->quick_replies = $quick_replies;
+		$this->metadata = $metadata;
     }
 
     /**
@@ -40,7 +52,7 @@ class Message
      */
     public function getData()
     {
-        return [
+		$result = [
             'recipient' =>  [
                 'id' => $this->recipient
             ],
@@ -48,6 +60,16 @@ class Message
                 'text' => $this->text
             ]
         ];
+
+		if($this->quick_replies != null){
+			$result['message']['quick_replies'] = $this->quick_replies;
+		}
+		
+		if($this->metadata != null){
+			$result['message']['metadata'] = $this->metadata;
+		}
+		
+        return $result;
     }
 
     /**

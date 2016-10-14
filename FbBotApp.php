@@ -30,24 +30,45 @@ class FbBotApp
     protected $apiUrl = 'https://graph.facebook.com/v2.6/';
     
     /**
-     * @var null|string
+     * BOT username
+     *
+     * @var string|null
      */
     protected $token = null;
-
-    /**
-     * FbBotApp constructor.
-     * @param string $token
-     */
+    
     public function __construct($token)
     {
         $this->token = $token;
+    }
+
+	/**
+     * Send Raw
+     *
+     * @param Raw $data
+	 * @param string $url
+     * @return mixed
+     */
+    public function sendRaw($url, $data)
+    {
+        return $this->call($url, $data);
+    }
+
+	/**
+     * Send Action
+     *
+     * @param Action $action
+     * @return mixed
+     */
+    public function sendAction($action)
+    {
+        return $this->call('me/messages', $action->getData());
     }
 
     /**
      * Send Message
      *
      * @param Message $message
-     * @return array
+     * @return mixed
      */
     public function send($message)
     {
@@ -57,14 +78,15 @@ class FbBotApp
     /**
      * Get User Profile Info
      *
-     * @param int    $id
-     * @param string $fields
-     * @return UserProfile
+     * @param $id
+     * @return array[first_name] First Name
+     * @return array[last_name] Last Name
+     * @return array[profile_pic] Profile Picture Url
      */
-    public function userProfile($id, $fields = 'first_name,last_name,profile_pic,locale,timezone,gender')
+    public function userProfile($id)
     {
         return new UserProfile($this->call($id, [
-            'fields' => $fields
+            'fields' => 'first_name,last_name,profile_pic'
         ], self::TYPE_GET));
     }
 
