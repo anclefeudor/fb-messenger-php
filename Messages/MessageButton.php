@@ -23,6 +23,11 @@ class MessageButton
      */
     const TYPE_ACCOUNT_LINK = "account_link";
 
+	/**
+     * Share button type
+     */
+    const TYPE_SHARE = "element_share";
+
     /**
      * Button type
      *
@@ -128,6 +133,8 @@ class MessageButton
 
 			case self::TYPE_ACCOUNT_LINK:
                 $result['url'] = $this->url;
+            break;
+			case self::TYPE_SHARE:
             break;
         }
 
